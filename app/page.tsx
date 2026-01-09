@@ -13,13 +13,13 @@ export default async function Home() {
     )
   );
 
-  console.log(initialBlocks[0]);
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center gap-2 py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <h1 className="text-4xl font-bold">Latest Blocks</h1>
-        <LatestBlocksTable blocks={initialBlocks} />
+    <div className="flex min-h-screen items-center justify-center bg-background font-sans">
+      <main className="flex min-h-screen w-full max-w-5xl flex-col items-center gap-6 py-16 px-8 sm:px-16 sm:items-start">
+        <h1 className="text-4xl font-bold text-foreground">Latest Blocks</h1>
+        <div className="w-full">
+          <LatestBlocksTable blocks={initialBlocks} />
+        </div>
       </main>
     </div>
   );

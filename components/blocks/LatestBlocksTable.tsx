@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
@@ -28,6 +29,8 @@ import {
   formatTimestamp,
 } from "@/lib/formatters";
 import { sortingFn } from "@/lib/tableUtils";
+import Link from "next/link";
+import { ROUTES } from "@/config/routes";
 
 type BlockTableData = Block;
 
@@ -68,9 +71,11 @@ export const LatestBlocksTable = ({ blocks }: { blocks: Block[] }) => {
         },
         cell: ({ row }) => {
           return (
-            <div className="font-medium">
+            <Link
+              href={ROUTES.BLOCK_DETAIL(formatBlockNumber(row.original.number))}
+            >
               {formatBlockNumber(row.original.number)}
-            </div>
+            </Link>
           );
         },
         sortingFn: (rowA, rowB) =>
@@ -101,7 +106,7 @@ export const LatestBlocksTable = ({ blocks }: { blocks: Block[] }) => {
         header: "Transactions",
         cell: ({ row }) => {
           return (
-            <div className="text-sm text-center">
+            <div className="text-sm">
               {row.original.transactions.length} Txns
             </div>
           );
@@ -153,45 +158,51 @@ export const LatestBlocksTable = ({ blocks }: { blocks: Block[] }) => {
   });
 
   return (
-    <Table>
-      <TableHeader>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <TableHead key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-              </TableHead>
-            ))}
-          </TableRow>
-        ))}
-      </TableHeader>
-      <TableBody>
-        {table.getRowModel().rows?.length ? (
-          table.getRowModel().rows.map((row) => (
-            <TableRow
-              key={row.id}
-              data-state={row.getIsSelected() && "selected"}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
+    <div className="overflow-hidden rounded-xl border border-white/10 bg-zinc-950/40 shadow-sm backdrop-blur">
+      <Table>
+        <TableHeader className="bg-zinc-950/40">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id} className="border-white/10">
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </TableHead>
               ))}
             </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={columns.length} className="h-24 text-center">
-              No blocks found.
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+                className="border-white/10 hover:bg-zinc-900/30"
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center text-muted-foreground"
+              >
+                No blocks found.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
