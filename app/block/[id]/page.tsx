@@ -23,6 +23,7 @@ import {
 import { formatUnits } from "viem";
 import { DetailCard } from "@/components/ui/detail-card";
 import { DetailRow } from "@/components/ui/detail-row";
+import { StatusBadge } from "@/components/ui/status-badge";
 
 export default async function BlockDetailPage({
   params,
@@ -95,13 +96,13 @@ export default async function BlockDetailPage({
 
           <DetailRow label="Transactions" icon={FileText}>
             <div className="flex items-center gap-3">
-              <div className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium border border-blue-100">
+              <StatusBadge variant="info" showIcon={false}>
                 {txCount} transactions
-              </div>
+              </StatusBadge>
               {block.withdrawals && block.withdrawals.length > 0 && (
-                <div className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium border border-green-100">
+                <StatusBadge variant="success" showIcon={false}>
                   {block.withdrawals.length} withdrawals
-                </div>
+                </StatusBadge>
               )}
               <span className="text-gray-500">in this block</span>
             </div>

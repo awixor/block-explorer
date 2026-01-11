@@ -21,6 +21,7 @@ import {
 import Link from "next/link";
 import { useMemo } from "react";
 import { formatEther, Transaction } from "viem";
+import { AddressLink } from "../ui/address-link";
 
 export const LatestTransactionsTable = ({
   transactions,
@@ -41,20 +42,12 @@ export const LatestTransactionsTable = ({
       {
         accessorKey: "from",
         header: "From",
-        cell: ({ row }) => (
-          <Link href={ROUTES.ADDRESS_DETAIL(row.original.from)}>
-            {formatHash(row.original.from)}
-          </Link>
-        ),
+        cell: ({ row }) => <AddressLink address={row.original.from} truncate />,
       },
       {
         accessorKey: "to",
         header: "To",
-        cell: ({ row }) => (
-          <Link href={ROUTES.ADDRESS_DETAIL(row.original.to ?? "")}>
-            {formatHash(row.original.to)}
-          </Link>
-        ),
+        cell: ({ row }) => <AddressLink address={row.original.to} truncate />,
       },
       {
         accessorKey: "value",

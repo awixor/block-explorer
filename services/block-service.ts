@@ -37,3 +37,12 @@ export const getBlock = cache(async (id: string) => {
     return null;
   }
 });
+
+export const getLatestBlockNumber = cache(async () => {
+  try {
+    return await publicClient.getBlockNumber();
+  } catch (error) {
+    console.error("Failed to fetch latest block number:", error);
+    return null;
+  }
+});
