@@ -21,3 +21,19 @@ export const getLatestBlocks = cache(async (count: number = 10) => {
     return [];
   }
 });
+
+export const getBlock = cache(async (id: string) => {
+  try {
+    const isHash = id.startsWith("0x");
+    const block = await publicClient.getBlock({
+      ...(isHash
+        ? { blockHash: id as `0x${string}` }
+        : { blockNumber: BigInt(id) }),
+      includeTransactions: true,
+    });
+    return block;
+  } catch (error) {
+    console.error(`Failed to fetch block ${id}:`, error);
+    return null;
+  }
+});
