@@ -8,8 +8,8 @@ export default async function Home() {
   const latestTransactions = await getLatestTransactions();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background font-sans">
-      <main className="flex min-h-screen w-full max-w-5xl flex-col items-center gap-6 py-16 px-8 sm:px-16 sm:items-start">
+    <div className="flex flex-col items-center bg-background font-sans">
+      <main className="flex w-full max-w-5xl flex-col items-center gap-6 py-12 px-8 sm:px-16 sm:items-start">
         <LatestBlocksTable blocks={initialBlocks} />
         <LatestTransactionsTable transactions={latestTransactions} />
       </main>
