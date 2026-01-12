@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface DetailCardProps {
-  title: string;
+  title: ReactNode;
   children: ReactNode;
   className?: string;
   headerClassName?: string;

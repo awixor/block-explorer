@@ -3,7 +3,7 @@ import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface DetailRowProps {
-  label: string;
+  label: ReactNode;
   icon?: LucideIcon;
   children: ReactNode;
   itemsStart?: boolean;
@@ -37,7 +37,10 @@ export function DetailRow({
         )}
       >
         {Icon && <Icon className="w-4 h-4" />}
-        <span>{label}:</span>
+        <span>
+          {label}
+          {typeof label === "string" && ":"}
+        </span>
       </div>
       <div className={cn("sm:w-2/3", valueClassName)}>{children}</div>
     </div>
