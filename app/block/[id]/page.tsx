@@ -3,6 +3,7 @@ import {
   formatTimestamp,
   formatGasUsed,
   formatGasPercentage,
+  formatTimeAgo,
 } from "@/lib/formatters";
 import { decodeHexToString } from "@/lib/utils";
 import { ROUTES } from "@/config/routes";
@@ -88,8 +89,7 @@ export default async function BlockDetailPage({
                 {formatTimestamp(block.timestamp)}
               </span>
               <span className="text-gray-400 text-sm">
-                ({Math.floor(Date.now() / 1000 - Number(block.timestamp))}{" "}
-                seconds ago)
+                ({formatTimeAgo(block.timestamp)})
               </span>
             </div>
           </DetailRow>

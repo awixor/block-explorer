@@ -4,6 +4,7 @@ import {
   formatTimestamp,
   formatGasUsed,
   formatGasPercentage,
+  formatTimeAgo,
 } from "@/lib/formatters";
 import { ROUTES } from "@/config/routes";
 import Link from "next/link";
@@ -144,8 +145,7 @@ export default async function TransactionDetailPage({
                   {formatTimestamp(block.timestamp)}
                 </span>
                 <span className="text-gray-400 text-sm">
-                  ({Math.floor(Date.now() / 1000 - Number(block.timestamp))}{" "}
-                  seconds ago)
+                  ({formatTimeAgo(block.timestamp)})
                 </span>
               </div>
             ) : (
