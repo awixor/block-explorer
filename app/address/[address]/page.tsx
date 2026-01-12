@@ -15,16 +15,17 @@ export default async function AddressDetailPage({
   const { address } = await params;
 
   const addressInfo = await getAddressInfo(address);
-  const ethPrice = await getEthPrice();
-  const balanceInETH = Number(formatEther(addressInfo?.balance ?? BigInt(0)));
-  const balanceInUSD = (balanceInETH * ethPrice).toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
 
   if (!addressInfo) {
     return notFound();
   }
+
+  const ethPrice = await getEthPrice();
+  const balanceInETH = Number(formatEther(addressInfo.balance));
+  const balanceInUSD = (balanceInETH * ethPrice).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-5xl">

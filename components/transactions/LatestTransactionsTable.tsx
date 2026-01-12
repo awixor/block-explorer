@@ -67,9 +67,7 @@ export const LatestTransactionsTable = ({
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <h1 className="text-4xl font-bold text-foreground">
-        Latest Transactions
-      </h1>
+      <h2 className="text-xl font-bold text-foreground">Latest Transactions</h2>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
