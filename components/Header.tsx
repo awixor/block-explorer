@@ -15,14 +15,6 @@ export function Header() {
             Block Explorer
           </span>
         </Link>
-        <nav className="ml-auto flex items-center gap-6">
-          <Link
-            href={ROUTES.HOME}
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Home
-          </Link>
-        </nav>
       </div>
     </header>
   );
