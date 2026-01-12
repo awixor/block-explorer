@@ -58,8 +58,6 @@ export const LatestTransactionsTable = ({
     []
   );
 
-  console.log(transactions);
-
   const table = useReactTable({
     data: transactions,
     columns,
