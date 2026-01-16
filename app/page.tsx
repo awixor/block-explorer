@@ -16,7 +16,7 @@ async function TransactionsSection() {
   return <LatestTransactionsTable transactions={latestTransactions} />;
 }
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex flex-col items-center bg-background font-sans">
       <div className="w-full bg-slate-900 py-16 px-4 mb-8">

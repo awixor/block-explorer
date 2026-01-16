@@ -28,15 +28,18 @@ import { AddressLink } from "@/components/ui/address-link";
 
 export default async function TransactionDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ hash: string }>;
+  searchParams: Promise<{ chain?: string }>;
 }) {
   const { hash } = await params;
+  const { chain } = await searchParams;
 
   const [tx, receipt, latestBlockNumber] = await Promise.all([
-    getTransaction(hash),
-    getTransactionReceipt(hash),
-    getLatestBlockNumber(),
+    getTransaction(hash, chain),
+    getTransactionReceipt(hash, chain),
+    getLatestBlockNumber(chain),
   ]);
 
   if (!tx) {
@@ -45,7 +48,7 @@ export default async function TransactionDetailPage({
 
   // Fetch block to get timestamp
   const block = tx.blockNumber
-    ? await getBlock(tx.blockNumber.toString())
+    ? await getBlock(tx.blockNumber.toString(), chain)
     : null;
 
   const status = receipt?.status === "success";
@@ -77,12 +80,13 @@ export default async function TransactionDetailPage({
         address={address}
         isContract={isContract}
         truncate={!receipt}
+        chain={chain}
       />
     );
   };
 
   const renderFrom = () => {
-    return <AddressLink address={tx.from} truncate={false} />;
+    return <AddressLink address={tx.from} truncate={false} chain={chain} />;
   };
 
   return (
@@ -119,7 +123,7 @@ export default async function TransactionDetailPage({
               {tx.blockNumber ? (
                 <>
                   <Link
-                    href={ROUTES.BLOCK_DETAIL(tx.blockNumber.toString())}
+                    href={ROUTES.BLOCK_DETAIL(tx.blockNumber.toString(), chain)}
                     className="text-blue-600 hover:text-blue-800 font-medium"
                   >
                     {tx.blockNumber.toString()}

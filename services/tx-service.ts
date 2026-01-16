@@ -1,9 +1,10 @@
-import { publicClient } from "@/config/viem";
+import { getClient } from "@/config/viem";
 import { cache } from "react";
 
-export const getLatestTransactions = cache(async () => {
+export const getLatestTransactions = cache(async (chain?: string) => {
   try {
-    const block = await publicClient.getBlock({
+    const client = getClient(chain);
+    const block = await client.getBlock({
       blockTag: "latest",
       includeTransactions: true,
     });
@@ -15,9 +16,10 @@ export const getLatestTransactions = cache(async () => {
   }
 });
 
-export const getTransaction = cache(async (hash: string) => {
+export const getTransaction = cache(async (hash: string, chain?: string) => {
   try {
-    const transaction = await publicClient.getTransaction({
+    const client = getClient(chain);
+    const transaction = await client.getTransaction({
       hash: hash as `0x${string}`,
     });
     return transaction;
@@ -27,14 +29,17 @@ export const getTransaction = cache(async (hash: string) => {
   }
 });
 
-export const getTransactionReceipt = cache(async (hash: string) => {
-  try {
-    const receipt = await publicClient.getTransactionReceipt({
-      hash: hash as `0x${string}`,
-    });
-    return receipt;
-  } catch (error) {
-    console.error(`Failed to fetch transaction receipt ${hash}:`, error);
-    return null;
+export const getTransactionReceipt = cache(
+  async (hash: string, chain?: string) => {
+    try {
+      const client = getClient(chain);
+      const receipt = await client.getTransactionReceipt({
+        hash: hash as `0x${string}`,
+      });
+      return receipt;
+    } catch (error) {
+      console.error(`Failed to fetch transaction receipt ${hash}:`, error);
+      return null;
+    }
   }
-});
+);

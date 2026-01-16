@@ -1,31 +1,35 @@
 import "server-only"; // Ensures this logic never runs on the client
 import { cache } from "react";
-import { publicClient } from "@/config/viem";
+import { getClient } from "@/config/viem";
 
-export const getLatestBlocks = cache(async (count: number = 10) => {
-  try {
-    const latestBlockNumber = await publicClient.getBlockNumber();
+export const getLatestBlocks = cache(
+  async (count: number = 10, chain?: string) => {
+    try {
+      const client = getClient(chain);
+      const latestBlockNumber = await client.getBlockNumber();
 
-    const blocks = await Promise.all(
-      Array.from({ length: count }).map((_, i) =>
-        publicClient.getBlock({
-          blockNumber: latestBlockNumber - BigInt(i),
-          includeTransactions: true,
-        })
-      )
-    );
+      const blocks = await Promise.all(
+        Array.from({ length: count }).map((_, i) =>
+          client.getBlock({
+            blockNumber: latestBlockNumber - BigInt(i),
+            includeTransactions: true,
+          })
+        )
+      );
 
-    return blocks;
-  } catch (error) {
-    console.error("Failed to fetch latest blocks:", error);
-    return [];
+      return blocks;
+    } catch (error) {
+      console.error("Failed to fetch latest blocks:", error);
+      return [];
+    }
   }
-});
+);
 
-export const getBlock = cache(async (id: string) => {
+export const getBlock = cache(async (id: string, chain?: string) => {
   try {
+    const client = getClient(chain);
     const isHash = id.startsWith("0x");
-    const block = await publicClient.getBlock({
+    const block = await client.getBlock({
       ...(isHash
         ? { blockHash: id as `0x${string}` }
         : { blockNumber: BigInt(id) }),
@@ -38,9 +42,10 @@ export const getBlock = cache(async (id: string) => {
   }
 });
 
-export const getLatestBlockNumber = cache(async () => {
+export const getLatestBlockNumber = cache(async (chain?: string) => {
   try {
-    return await publicClient.getBlockNumber();
+    const client = getClient(chain);
+    return await client.getBlockNumber();
   } catch (error) {
     console.error("Failed to fetch latest block number:", error);
     return null;

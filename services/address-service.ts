@@ -1,18 +1,19 @@
 import "server-only";
 import { cache } from "react";
-import { publicClient } from "@/config/viem";
+import { getClient } from "@/config/viem";
 import { isAddress } from "viem";
 
-export const getAddressInfo = cache(async (address: string) => {
+export const getAddressInfo = cache(async (address: string, chain?: string) => {
   try {
     if (!isAddress(address)) {
       return null;
     }
 
+    const client = getClient(chain);
     const [balance, code, transactionCount] = await Promise.all([
-      publicClient.getBalance({ address }),
-      publicClient.getCode({ address }),
-      publicClient.getTransactionCount({ address }),
+      client.getBalance({ address }),
+      client.getCode({ address }),
+      client.getTransactionCount({ address }),
     ]);
 
     const isContract = code && code !== "0x";
@@ -30,15 +31,18 @@ export const getAddressInfo = cache(async (address: string) => {
   }
 });
 
-export const getAddressBalance = cache(async (address: string) => {
-  try {
-    if (!isAddress(address)) {
+export const getAddressBalance = cache(
+  async (address: string, chain?: string) => {
+    try {
+      if (!isAddress(address)) {
+        return null;
+      }
+
+      const client = getClient(chain);
+      return await client.getBalance({ address });
+    } catch (error) {
+      console.error(`Failed to fetch balance for ${address}:`, error);
       return null;
     }
-
-    return await publicClient.getBalance({ address });
-  } catch (error) {
-    console.error(`Failed to fetch balance for ${address}:`, error);
-    return null;
   }
-});
+);

@@ -9,12 +9,15 @@ import { getEthPrice } from "@/services/price-service";
 
 export default async function AddressDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ address: string }>;
+  searchParams: Promise<{ chain?: string }>;
 }) {
   const { address } = await params;
+  const { chain } = await searchParams;
 
-  const addressInfo = await getAddressInfo(address);
+  const addressInfo = await getAddressInfo(address, chain);
 
   if (!addressInfo) {
     return notFound();

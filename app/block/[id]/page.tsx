@@ -28,11 +28,14 @@ import { StatusBadge } from "@/components/ui/status-badge";
 
 export default async function BlockDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ chain?: string }>;
 }) {
   const { id } = await params;
-  const block = await getBlock(id);
+  const { chain } = await searchParams;
+  const block = await getBlock(id, chain);
 
   if (!block) {
     return notFound();
@@ -66,14 +69,14 @@ export default async function BlockDetailPage({
               </span>
               <div className="flex gap-1">
                 <Link
-                  href={ROUTES.BLOCK_DETAIL(blockNumber - 1)}
+                  href={ROUTES.BLOCK_DETAIL(blockNumber - 1, chain)}
                   className="p-1.5 hover:bg-gray-100 rounded-md border transition-colors text-gray-600"
                   title="Previous Block"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </Link>
                 <Link
-                  href={ROUTES.BLOCK_DETAIL(blockNumber + 1)}
+                  href={ROUTES.BLOCK_DETAIL(blockNumber + 1, chain)}
                   className="p-1.5 hover:bg-gray-100 rounded-md border transition-colors text-gray-600"
                   title="Next Block"
                 >
@@ -110,7 +113,7 @@ export default async function BlockDetailPage({
 
           <DetailRow label="Fee Recipient" icon={User}>
             <Link
-              href={ROUTES.ADDRESS_DETAIL(block.miner)}
+              href={ROUTES.ADDRESS_DETAIL(block.miner, chain)}
               className="text-blue-600 hover:text-blue-800 font-mono break-all flex items-center gap-1"
             >
               {block.miner}
@@ -184,7 +187,7 @@ export default async function BlockDetailPage({
 
           <DetailRow label="Parent Hash">
             <Link
-              href={ROUTES.BLOCK_DETAIL(block.parentHash)}
+              href={ROUTES.BLOCK_DETAIL(block.parentHash, chain)}
               className="text-blue-600 hover:text-blue-800 font-mono text-sm break-all flex items-center gap-1"
             >
               {block.parentHash}
